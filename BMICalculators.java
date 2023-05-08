@@ -1,23 +1,19 @@
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
- 
 
 public class BMICalculators implements ActionListener {
-	double heightNum, weightNum;
-	JTextField weightField, heightField,textfield;
+	double num1 = 0, num2 = 0, result = 0;
+	JTextField weightField, heightField, textfield;
 	JLabel height, weight;
 	JPanel panel;
 	JFrame frame;
+	JButton resultBtn;
 
 	BMICalculators() {
 		frame = new JFrame("BMI 계산기");
@@ -34,18 +30,21 @@ public class BMICalculators implements ActionListener {
 		heightField = new JTextField(15);
 		heightField.setBounds(50, 100, 200, 30);
 		weightField.setBounds(50, 200, 200, 30);
-		JButton button = new JButton();
-		button.setText("결과  보기");
-		button.setBounds(150, 300, 300, 50);
+		resultBtn = new JButton("=");
+		resultBtn.setText("결과  보기");
+		resultBtn.addActionListener(this);
+		resultBtn.setBounds(150, 300, 300, 50);
 		textfield = new JTextField(15);
 		textfield.setBounds(50, 350, 300, 50);
 		textfield.setEditable(false);
+
+		textfield.setText("");
 
 		panel.add(height);
 		panel.add(heightField);
 		panel.add(weight);
 		panel.add(weightField);
-		panel.add(button);
+		panel.add(resultBtn);
 		panel.add(textfield);
 
 		frame.add(panel);
@@ -62,7 +61,31 @@ public class BMICalculators implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
+		/*
+		 * 비만도 측정(BMI지수) BMI를 이용한 비만도 계산은 자신의 몸무게를 키의 제곱으로 나누는 것으로 공식은 kg/㎡. BMI가 18.5
+		 * 이하면 저체중 ／ 18.5 ~ 22.9 사이면 정상 ／ 23.0 ~ 24.9 사이면 과체중 ／ 25.0 이상부터는 비만으로 판정. ex)
+		 * 키 170㎝에 몸무게 73kg이면, 계산식 : 73 / (1.7×1.7) = 25.26 → 과체중
+		 */
+
+		if (e.getSource() == resultBtn) {
+			num1 = Double.parseDouble(heightField.getText());
+			num2 = Double.parseDouble(weightField.getText());
+
+			result = num2 / (num1 * num1);
+
+		}
+
+		if (result < 18.5) {
+			textfield.setText("저체중");
+		} else if (result < 22.9) {
+			textfield.setText("정상");
+		} else if (result < 24.9) {
+			textfield.setText("과체중");
+		} else {
+			textfield.setText("비만");
+		}
+
 	}
 
 }
